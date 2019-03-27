@@ -1,25 +1,17 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dominion.Cards;
+using Dominion.Models.Cards.Interfaces;
 
 namespace Dominion.Models
 {
     public class DiscardPile
     {
-        private Random _shuffleRandomizer;
-        private List<ICard> _cards;
+        private readonly Random _shuffleRandomizer;
+        private readonly List<ICard> _cards;
 
         public int Size => _cards.Count;
-
-        public List<ICard> Cards
-        {
-            get { return _cards.GetRange(0, _cards.Count()); }
-        }
+        public IEnumerable<ICard> Cards => _cards.AsReadOnly();
 
         public DiscardPile()
         {
@@ -47,7 +39,7 @@ namespace Dominion.Models
             return removedCards;
         }
 
-        internal void Put(List<ICard> cards)
+        public void Put(List<ICard> cards)
         {
             _cards.AddRange(cards);
         }

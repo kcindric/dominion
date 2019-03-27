@@ -1,16 +1,16 @@
 ﻿
 using System.Collections.Generic;
-using Dominion.Cards;
+using System.Collections.ObjectModel;
+using Dominion.Models.Cards.Interfaces;
 
 namespace Dominion.Models
 {
     public class Hand
     {
         public int Size => _cards.Count;
-        public List<ICard> Cards => _cards.GetRange(0, _cards.Count);
+        public ReadOnlyCollection<ICard> Cards => _cards.AsReadOnly();
 
-        private List<ICard> _cards;
-
+        private readonly List<ICard> _cards;
 
         public Hand()
         {
@@ -24,7 +24,7 @@ namespace Dominion.Models
             return removedCards;
         }
 
-        internal void Put(List<ICard> cards)
+        public void Put(List<ICard> cards)
         {
             _cards.AddRange(cards);
         }

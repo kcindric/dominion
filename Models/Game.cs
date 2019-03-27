@@ -1,12 +1,9 @@
-﻿
-using Dominion.Cards;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System;
-using Dominion.Cards.Victory;
-using Dominion.Cards.Treasure;
-using Dominion.Cards.Factory;
+using Dominion.Models.Cards.Interfaces;
+using Dominion.Models.Cards.Factory;
 
-namespace Dominion
+namespace Dominion.Models
 {
     public enum TurnPhase
     {
@@ -46,6 +43,7 @@ namespace Dominion
             this.PlayerOnTurn = this.StartingPlayer = Players[rand.Next(0, Players.Count - 1)];
             this.TurnPhase = TurnPhase.ACTION;
             RemainingProvinces = this.NumberOfPlayers == 2 ? 8 : 12;
+            CardsInPlay = new List<Stack<ICard>>();
             SetupCardSets();
         }
 

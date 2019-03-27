@@ -1,10 +1,8 @@
-﻿using Dominion.Cards;
-using Dominion.Cards.Factory;
-using System.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Dominion.Models.Cards.Interfaces;
 
-namespace Dominion
+namespace Dominion.Models
 {
     public class Deck
     {
@@ -45,7 +43,7 @@ namespace Dominion
             return this;
         }
 
-        internal Deck PutUnder(List<ICard> cards)
+        public Deck PutUnder(List<ICard> cards)
         {
             _cards.AddRange(cards);
             return this;
