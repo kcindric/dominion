@@ -11,7 +11,9 @@ namespace Dominion.Cards.KingdomCards
         public CardType CardType { get; }
         public Player Player { get; set; }
 
-        public int Points { get; }
+        private readonly int _points;
+
+        public int Points => Player.DiscardPile.Size / 10 * _points;
 
         public GardensCard(CardName name, int cost, CardType cardType, string cardText, int points)
         {
@@ -19,17 +21,11 @@ namespace Dominion.Cards.KingdomCards
             this.Cost = cost;
             this.CardType = cardType;
             this.CardText = cardText;
-
-            this.Points = points;
+            this._points = points;
         }
 
         public void Play()
         {
-        }
-
-        public int EvaluateScore()
-        {
-            return this.Player.Deck.DeckSize / 10 * this.Points;
         }
     }
 }

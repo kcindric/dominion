@@ -18,13 +18,5 @@ namespace Dominion.Cards.TreasureCards
             this.CardType = cardType;
             this.MoneyValue = moneyValue;
         }
-
-        public void Play()
-        {
-            if (this.Player != null)
-                this.Player.IncreaseMoney(this.MoneyValue);
-            else
-                throw new Exception("Card owner not set, cannot be played!");
-        }
     }
 }

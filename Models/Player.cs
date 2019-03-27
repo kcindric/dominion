@@ -2,33 +2,52 @@
 using Dominion.Cards;
 using Dominion.Cards.Victory;
 using System;
-using System.Collections.Generic;
+using Dominion.Cards.Factory;
 using Dominion.Cards.Treasure;
+using Dominion.Models;
 
 namespace Dominion
 {
     public class Player
     {
+        public string Name { get; }
+
         public int Actions { get; private set; }
         public int Buys { get; private set; }
         public bool OnTurn { get; private set; }
         public int TurnNumber { get; private set; }
         public int Money { get; private set; }
 
-        public Deck Deck { get; set; }
+        public double TotalCards => DeckSize + HandSize + DiscardPileSize;
+        public double DeckSize => _deck.Size;
+        public double HandSize => _hand.Size;
+        public double DiscardPileSize => DiscardPile.Size;
 
-        public string Name { get; }
+        private readonly Deck _deck;
+        private readonly Hand _hand;
+        public DiscardPile DiscardPile;
+
 
         public Player(string name)
         {
             this.Name = name;
-            Deck = new Deck(this);
-            Deck.DrawHand();
+            _deck = new Deck();
+            _hand = new Hand();
+            DiscardPile = new DiscardPile();
         }
 
-        internal void IncreaseMoney(int moneyValue)
+        public Player Setup()
         {
-            Money++;
+            for (int i = 0; i < 7; i++)
+                _deck.PutOnto(BigFuckingFactory.TreasureCardFactories[CardName.COPPER].CreateTreasureCard());
+            for (int i = 0; i < 3; i++)
+                _deck.PutOnto(BigFuckingFactory.VictoryCardFactories[CardName.ESTATE].CreateVictoryCard());
+
+            _deck.Shuffle();
+
+            DrawHand();
+
+            return this;
         }
 
         public void Action(IKingdomCard card)
@@ -67,8 +86,7 @@ namespace Dominion
             Buys = 0;
             Actions = 0;
             OnTurn = false;
-            Deck.DiscardHand();
-            Deck.DrawHand();
+            DiscardHand().DrawHand();
         }
 
         public void StartTurn()
@@ -82,25 +100,56 @@ namespace Dominion
 
         private void CountMoney()
         {
-            foreach (ICard card in Deck.Hand)
-                ((ITreasureCard)card)?.Play();
+            foreach (ICard card in _hand.Cards)
+                Money += ((ITreasureCard) card)?.MoneyValue ?? 0;
         }
 
         public int CountPoints()
         {
-            Deck.Hand.AddRange(Deck.Draw(Deck.TotalCards - Deck.Hand.Count));
+            DiscardPile.Put(_hand.RemoveAll());
+            DiscardPile.Put(_deck.RemoveAll());
+
             int points = 0;
             
-            foreach (ICard c in Deck.Hand)
+            foreach (ICard c in DiscardPile.Cards)
             {
                 IVictoryCard vc = (IVictoryCard)c;
                 if (vc != null)
                 {
-                    points += vc.EvaluateScore();
+                    points += vc.Points;
                 }
             }
 
             return points;
+        }
+
+        public Player Draw(int n)
+        {
+            if (_deck.Size < n)
+                this.ReshuffleDiscardPileIntoDeck();
+
+            _hand.Put(_deck.Draw(n));
+
+            return this;
+        }
+
+        private Player DrawHand()
+        {
+            Draw(5);
+
+            return this;
+        }
+
+        private Player DiscardHand()
+        {
+            DiscardPile.Put(_hand.RemoveAll());
+
+            return this;
+        }
+
+        private void ReshuffleDiscardPileIntoDeck()
+        {
+            _deck.PutUnder(DiscardPile.Shuffle().RemoveAll());
         }
     }
 }

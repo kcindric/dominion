@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dominion.Cards.Victory
+namespace Dominion.Controllers
 {
-    public interface IVictoryCard : ICard
+    class PlayerController
     {
-        int Points { get; }
     }
 }

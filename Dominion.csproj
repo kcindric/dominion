@@ -58,9 +58,13 @@
     <Compile Include="Cards\VictoryCards\ProvinceCard.cs" />
     <Compile Include="Cards\VictoryCards\DuchyCard.cs" />
     <Compile Include="Cards\VictoryCards\EstateCard.cs" />
-    <Compile Include="Deck.cs" />
-    <Compile Include="Game.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="Controllers\GameController.cs" />
+    <Compile Include="Controllers\PlayerController.cs" />
+    <Compile Include="Models\Deck.cs" />
+    <Compile Include="Models\DiscardPile.cs" />
+    <Compile Include="Models\Game.cs" />
+    <Compile Include="Models\Hand.cs" />
+    <Compile Include="Models\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -56,7 +56,5 @@ namespace Dominion.Cards
         int Cost { get; }
         CardType CardType { get; }
         Player Player { get; set; }
-
-        void Play();
     }
 }

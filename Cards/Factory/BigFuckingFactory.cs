@@ -4,8 +4,6 @@ namespace Dominion.Cards.Factory
 {
     public static class BigFuckingFactory
     {
-        //public static BigFuckingFactory INSTANCE;
-
         public static Dictionary<CardName, KingdomCardFactory> KingdomCardFactories;
         public static Dictionary<CardName, VictoryCardFactory> VictoryCardFactories;
         public static Dictionary<CardName, TreasureCardFactory> TreasureCardFactories;

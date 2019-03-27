@@ -22,14 +22,5 @@ namespace Dominion.Cards.VictoryCards
             this.CardType = cardType;
             this.Points = points;
         }
-
-        public int EvaluateScore()
-        {
-            return this.Points;
-        }
-
-        public void Play()
-        {
-        }
     }
 }
