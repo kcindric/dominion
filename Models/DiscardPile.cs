@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Dominion.Models.Cards.Interfaces;
 
 namespace Dominion.Models
@@ -12,6 +11,18 @@ namespace Dominion.Models
 
         public int Size => _cards.Count;
         public IEnumerable<ICard> Cards => _cards.AsReadOnly();
+
+        internal IEnumerable<IVictoryCard> VictoryCards
+        {
+            get
+            {
+                foreach (ICard c in _cards)
+                {
+                    if (((IVictoryCard) c) != null)
+                        yield return (IVictoryCard) c;
+                }
+            }
+        }
 
         public DiscardPile()
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Dominion.Models.Cards.Interfaces;
 using Dominion.Models.Cards.Factory;
 using Dominion.Models;
@@ -106,13 +107,9 @@ namespace Dominion.Models
 
             int points = 0;
             
-            foreach (ICard c in DiscardPile.Cards)
+            foreach (IVictoryCard c in DiscardPile.VictoryCards)
             {
-                IVictoryCard vc = (IVictoryCard)c;
-                if (vc != null)
-                {
-                    points += vc.Points;
-                }
+                    points += c.Points;
             }
 
             return points;

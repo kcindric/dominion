@@ -15,10 +15,7 @@ namespace Dominion.Models
 
     public class Game
     {
-        public int NumberOfPlayers
-        {
-            get { return Players.Count; }
-        }
+        public int NumberOfPlayers => Players.Count;
 
         public int RemainingProvinces;
 
