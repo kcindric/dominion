@@ -1,4 +1,6 @@
 ﻿
+using System.Runtime.CompilerServices;
+
 namespace Dominion.Models.Cards.Interfaces
 {
     public enum CardType
@@ -56,5 +58,14 @@ namespace Dominion.Models.Cards.Interfaces
         int Cost { get; }
         CardType CardType { get; }
         Player Player { get; set; }
+    }
+
+    public static class CardX
+    {
+        public static ICard SetOwner(this ICard card, Player owner)
+        {
+            card.Player = owner;
+            return card;
+        }
     }
 }

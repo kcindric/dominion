@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Dominion.Models.Cards.Interfaces;
 
 namespace Dominion.Models
@@ -18,8 +19,8 @@ namespace Dominion.Models
             {
                 foreach (ICard c in _cards)
                 {
-                    if (((IVictoryCard) c) != null)
-                        yield return (IVictoryCard) c;
+                    if (c is IVictoryCard victoryCard)
+                        yield return victoryCard;
                 }
             }
         }
@@ -32,7 +33,7 @@ namespace Dominion.Models
 
         public DiscardPile Shuffle()
         {
-            for (int i = _cards.Count - 1; i == 0; i--)
+            for (int i = _cards.Count - 1; i >= 0; i--)
             {
                 int r = _shuffleRandomizer.Next(0, i);
                 var temp = _cards[r];
@@ -45,7 +46,7 @@ namespace Dominion.Models
 
         public List<ICard> RemoveAll()
         {
-            List<ICard> removedCards = _cards;
+            List<ICard> removedCards = _cards.ToList();
             _cards.Clear();
             return removedCards;
         }
@@ -53,6 +54,11 @@ namespace Dominion.Models
         public void Put(List<ICard> cards)
         {
             _cards.AddRange(cards);
+        }
+
+        public void Put(ICard card)
+        {
+            _cards.Add(card);
         }
     }
 }

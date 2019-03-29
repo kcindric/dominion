@@ -20,7 +20,7 @@ namespace Dominion.Models
 
         public Deck Shuffle()
         {
-            for (int i = _cards.Count - 1; i == 0; i--)
+            for (int i = _cards.Count - 1; i >= 0; i--)
             {
                 int r = _shuffleRandomizer.Next(0, i);
                 var temp = _cards[r];

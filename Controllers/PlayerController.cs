@@ -20,31 +20,41 @@ namespace Dominion.Controllers
         public void StartActionPhase()
         {
             _player.StartTurn();
-            _playerView.StartTurn(_player.TurnNumber, _player.Actions, _player.Buys, _player.Money);
+            _playerView.StartTurnRender(_player.TurnNumber, _player.Actions, _player.Buys, _player.Money, _player.Hand.Cards);
         }
 
         public void StartBuyPhase(List<Stack<ICard>> cardsInPlay)
         {
             if (_player.Money == 0)
             {
-                _playerView.EndBuyPhase("No money");
+                _playerView.EndBuyPhaseRender(null);
                 return;
             }
 
-            ICard boughtCard = _playerView.PromptBuy(_player.Money);
-
-            while (_player.Money > 0 && _player.Buys > 0 && boughtCard != null)
+            while (_player.Money > 0 && _player.Buys > 0)
             {
-                _player.Buy(boughtCard);
-                _playerView.SetMoney(_player.Money);
-                boughtCard = _playerView.PromptBuy(_player.Money);
+                var chosenCardStack = _playerView.PromptBuyRender(_player.Money, cardsInPlay);
+                if (chosenCardStack == null)
+                    break;
+
+                if (chosenCardStack.Peek().Cost <= _player.Money)
+                {
+                    _player.Buy(chosenCardStack.Pop());
+                    _playerView.BuyCardRender(_player.LastBoughtThisTurn, _player.Money);
+                }
+                else
+                {
+                    _playerView.MessageRender("Not enough money, please choose another card.");
+                }
             }
+
+            _playerView.EndBuyPhaseRender(_player.BoughThisTurn);
         }
 
         public void StartCleanupPhase()
         {
             _player.Cleanup();
-            _playerView.Cleanup(_player.Hand.Cards, _player.Actions, _player.Buys, _player.Money);
+            _playerView.CleanupRender(_player.Hand.Cards, _player.Actions, _player.Buys, _player.Money);
         }
     }
 }

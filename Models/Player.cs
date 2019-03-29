@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Dominion.Models.Cards.Interfaces;
 using Dominion.Models.Cards.Factory;
 using Dominion.Models;
@@ -23,7 +24,11 @@ namespace Dominion.Models
 
         public readonly Deck Deck;
         public readonly Hand Hand;
-        public DiscardPile DiscardPile;
+        public readonly DiscardPile DiscardPile;
+
+        private readonly List<ICard> _boughtThisTurn;
+        public ICard LastBoughtThisTurn => _boughtThisTurn.Last();
+        public IEnumerable<ICard> BoughThisTurn => _boughtThisTurn.AsReadOnly(); 
 
 
         public Player(string name)
@@ -32,14 +37,15 @@ namespace Dominion.Models
             Deck = new Deck();
             Hand = new Hand();
             DiscardPile = new DiscardPile();
+            _boughtThisTurn = new List<ICard>();
         }
 
         public Player Setup()
         {
             for (int i = 0; i < 7; i++)
-                Deck.PutOnto(BigFuckingFactory.TreasureCardFactories[CardName.COPPER].CreateTreasureCard());
+                Deck.PutOnto(BigFuckingFactory.TreasureCardFactories[CardName.COPPER].CreateTreasureCard().SetOwner(this));
             for (int i = 0; i < 3; i++)
-                Deck.PutOnto(BigFuckingFactory.VictoryCardFactories[CardName.ESTATE].CreateVictoryCard());
+                Deck.PutOnto(BigFuckingFactory.VictoryCardFactories[CardName.ESTATE].CreateVictoryCard().SetOwner(this));
 
             Deck.Shuffle();
             DrawHand();
@@ -59,30 +65,19 @@ namespace Dominion.Models
 
         public void Buy(ICard card)
         {
-            if (Buys > 0)
-            {
-                Buys--;
-
-                if (Money >= card.Cost)
-                {
-                    Money -= card.Cost;
-                    card.Player = this;
-                }
-                else
-                    throw new Exception("Not enough money!");
-            }
-            else
-                throw new Exception("No buys remaining!");
-
+            Buys--;
+            Money -= card.Cost;
+            card.Player = this;
+            DiscardPile.Put(card);
+            _boughtThisTurn.Add(card);
         }
 
         public void Cleanup()
         {
-            Money = 0;
-            Buys = 0;
-            Actions = 0;
+            Buys = 1;
+            Actions = 1;
             OnTurn = false;
-            DiscardHand().DrawHand();
+            DiscardHand().DrawHand().CountMoney();
         }
 
         public void StartTurn()
@@ -96,8 +91,9 @@ namespace Dominion.Models
 
         private void CountMoney()
         {
-            foreach (ICard card in Hand.Cards)
-                Money += ((ITreasureCard) card)?.MoneyValue ?? 0;
+            Money = 0;
+            foreach (ITreasureCard card in Hand.TreasureCards)
+                Money += card.MoneyValue;
         }
 
         public int CountPoints()

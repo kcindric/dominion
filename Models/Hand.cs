@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Dominion.Models.Cards.Interfaces;
 
 namespace Dominion.Models
@@ -9,6 +10,18 @@ namespace Dominion.Models
     {
         public int Size => _cards.Count;
         public ReadOnlyCollection<ICard> Cards => _cards.AsReadOnly();
+
+        internal IEnumerable<ITreasureCard> TreasureCards
+        {
+            get
+            {
+                foreach (ICard c in _cards)
+                {
+                    if (c is ITreasureCard treasureCard)
+                        yield return treasureCard;
+                }
+            }
+        }
 
         private readonly List<ICard> _cards;
 
@@ -19,7 +32,7 @@ namespace Dominion.Models
 
         public List<ICard> RemoveAll()
         {
-            List<ICard> removedCards = _cards;
+            List<ICard> removedCards = _cards.ToList();
             _cards.Clear();
             return removedCards;
         }

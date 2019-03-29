@@ -6,7 +6,8 @@ namespace Dominion.Views
     public interface IGameView
     {
         void ShowFinalScoring(Dictionary<Player, int> finalScoring);
-        void ChangeTurnPhase(TurnPhase turnPhase);
-        void ChangePlayerOnTurn(Player playerOnTurn);
+        void TurnPhaseRender(TurnPhase turnPhase);
+        void StartTurnRender(Player playerOnTurn);
+        void StartGameRender();
     }
 }

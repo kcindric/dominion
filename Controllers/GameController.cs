@@ -20,20 +20,27 @@ namespace Dominion.Controllers
 
         public void StartGame()
         {
+            foreach (var player in _game.Players)
+                player.Setup();
+
+            _gameView.StartGameRender();
+
             while (_game.TurnPhase != TurnPhase.GAME_END)
             {
-                _gameView.ChangeTurnPhase(_game.TurnPhase);
 
                 switch (_game.TurnPhase)
                 {
                     case TurnPhase.ACTION:
-                        _gameView.ChangePlayerOnTurn(_game.PlayerOnTurn);
+                        _gameView.StartTurnRender(_game.PlayerOnTurn);
+                        _gameView.TurnPhaseRender(_game.TurnPhase);
                         _playerControllers[_game.PlayerOnTurn].StartActionPhase();
                         break;
                     case TurnPhase.BUY:
+                        _gameView.TurnPhaseRender(_game.TurnPhase);
                         _playerControllers[_game.PlayerOnTurn].StartBuyPhase(_game.CardsInPlay);
                         break;
                     case TurnPhase.CLEANUP:
+                        _gameView.TurnPhaseRender(_game.TurnPhase);
                         _playerControllers[_game.PlayerOnTurn].StartCleanupPhase();
                         break;
                 }
