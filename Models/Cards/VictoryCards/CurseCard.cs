@@ -3,7 +3,7 @@ using Dominion.Models.Cards.Interfaces;
 
 namespace Dominion.Models.Cards.VictoryCards
 {
-    class CurseCard : IVictoryCard
+    internal class CurseCard : IVictoryCard
     {
         public int Points { get; }
         public CardName Name { get; }
@@ -13,10 +13,10 @@ namespace Dominion.Models.Cards.VictoryCards
 
         public CurseCard(CardName name, int cost, CardType cardType, int points)
         {
-            this.Name = name;
-            this.Cost = cost;
-            this.CardType = cardType;
-            this.Points = points;
+            Name = name;
+            Cost = cost;
+            CardType = cardType;
+            Points = points;
         }
     }
 }

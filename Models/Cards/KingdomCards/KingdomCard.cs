@@ -13,15 +13,15 @@ namespace Dominion.Models.Cards.KingdomCards
         public CardType CardType { get; }
         public Player Player { get; set; }
 
-        private readonly CardEffect _cardEffect;
+        private readonly CardEffect _cardEffects;
 
-        public KingdomCard(CardName name, int cost, CardType cardType, string cardText, CardEffect cardEffect)
+        public KingdomCard(CardName name, int cost, CardType cardType, string cardText, CardEffect cardEffects)
         {
-            this.Name = name;
-            this.Cost = cost;
-            this.CardType = cardType;
-            this.CardText = cardText;
-            this._cardEffect = cardEffect;
+            Name = name;
+            Cost = cost;
+            CardType = cardType;
+            CardText = cardText;
+            _cardEffects = cardEffects;
         }
 
         public void Play(Game game, IPlayerView playerView)
@@ -29,7 +29,7 @@ namespace Dominion.Models.Cards.KingdomCards
             if(Player == null)
                 throw new Exception("Owner of this card is not set. Cannot play");
 
-            _cardEffect.Invoke(game, this.Player, playerView);
+            _cardEffects.Invoke(game, Player, playerView);
         }
     }
 }

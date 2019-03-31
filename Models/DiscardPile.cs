@@ -36,7 +36,7 @@ namespace Dominion.Models
             for (int i = _cards.Count - 1; i >= 0; i--)
             {
                 int r = _shuffleRandomizer.Next(0, i);
-                var temp = _cards[r];
+                ICard temp = _cards[r];
                 _cards[r] = _cards[i];
                 _cards[i] = temp;
             }

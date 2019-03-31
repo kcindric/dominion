@@ -14,22 +14,14 @@ namespace Dominion.Models.Cards.Factory
     {
         internal override IKingdomCard CreateKingdomCard()
         {
-            CardEffect cardEffect =
+            CardEffect cardEffects =
                 new CardEffect(CardEffectController.PutCardFromHandOntoDeck)
-              + new CardEffect(CardEffectController.GainCardWorthUpTo5);
+                + new CardEffect(CardEffectController.GainCardWorthUpTo5);
 
-            return new KingdomCard(CardName.ARTISAN, 6, CardType.ACTION, "Gain a card to your hand costing up to 5.\nPut a card from your hand onto your deck.", cardEffect);
+            return new KingdomCard(CardName.ARTISAN, 6, CardType.ACTION,
+                "Gain a card to your hand costing up to 5.\nPut a card from your hand onto your deck.", cardEffects);
         }
     }
-
-
-    //internal class ArtisanFactory : KingdomCardFactory
-    //{
-    //    internal override IKingdomCard CreateKingdomCard()
-    //    {
-    //        return new ArtisanCard(CardName.ARTISAN, 6, CardType.ACTION, "Gain a card to your hand costing up to 5.\nPut a card from your hand onto your deck.");
-    //    }
-    //}
 
     internal class BanditFactory : KingdomCardFactory
     {

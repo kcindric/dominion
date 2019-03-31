@@ -20,7 +20,7 @@ namespace Dominion.Controllers
 
         public void StartGame()
         {
-            foreach (var player in _game.Players)
+            foreach (Player player in _game.Players)
                 player.Setup();
 
             _gameView.StartGameRender();
@@ -48,7 +48,7 @@ namespace Dominion.Controllers
                 _game.Advance();
             }
 
-            var finalScoring = _game.End();
+            Dictionary<Player, int> finalScoring = _game.End();
             _gameView.ShowFinalScoring(finalScoring);
         }
     }

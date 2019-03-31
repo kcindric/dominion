@@ -32,9 +32,9 @@ namespace Dominion.Controllers
                 if (card == null)
                     break;
 
-                IKingdomCard playedCard = (_player.Hand.Cards.First(c => c == card) as IKingdomCard);
+                IKingdomCard playedCard = _player.Hand.Cards.First(c => c == card) as IKingdomCard;
                 _player.Action(playedCard);
-                playedCard?.Play(this._game,this._playerView);
+                playedCard?.Play(_game,_playerView);
             } 
         }
 
@@ -48,7 +48,7 @@ namespace Dominion.Controllers
 
             while (_player.Money > 0 && _player.Buys > 0)
             {
-                var chosenCardStack = _playerView.PromptBuyRender(_player.Money, cardsInPlay);
+                Stack<ICard> chosenCardStack = _playerView.PromptBuyRender(_player.Money, cardsInPlay);
                 if (chosenCardStack == null)
                     break;
 

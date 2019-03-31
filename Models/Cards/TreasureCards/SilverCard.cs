@@ -13,10 +13,10 @@ namespace Dominion.Models.Cards.TreasureCards
 
         public SilverCard(CardName name, int cost, CardType cardType, int moneyValue)
         {
-            this.Name = name;
-            this.Cost = cost;
-            this.CardType = cardType;
-            this.MoneyValue = moneyValue;
+            Name = name;
+            Cost = cost;
+            CardType = cardType;
+            MoneyValue = moneyValue;
         }
     }
 }

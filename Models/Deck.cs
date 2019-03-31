@@ -6,8 +6,8 @@ namespace Dominion.Models
 {
     public class Deck
     {
-        private Random _shuffleRandomizer;
-        private List<ICard> _cards;
+        private readonly Random _shuffleRandomizer;
+        private readonly List<ICard> _cards;
 
         public int Size => _cards.Count;
 
@@ -23,7 +23,7 @@ namespace Dominion.Models
             for (int i = _cards.Count - 1; i >= 0; i--)
             {
                 int r = _shuffleRandomizer.Next(0, i);
-                var temp = _cards[r];
+                ICard temp = _cards[r];
                 _cards[r] = _cards[i];
                 _cards[i] = temp;
             }
@@ -33,13 +33,13 @@ namespace Dominion.Models
 
         public Deck PutOnto(ICard card)
         {
-            this._cards.Insert(0, card);
+            _cards.Insert(0, card);
             return this;
         }
 
         public Deck PutOnto(List<ICard> cards)
         {
-            this._cards.InsertRange(0, cards);
+            _cards.InsertRange(0, cards);
             return this;
         }
 

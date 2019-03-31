@@ -57,7 +57,7 @@ namespace Dominion.Models
 
         internal ICard Remove(ICard card)
         {
-            var removed = card;
+            ICard removed = card;
             _cards.Remove(card);
 
             return removed;

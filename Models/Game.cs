@@ -28,16 +28,16 @@ namespace Dominion.Models
 
         public Game(List<Player> players)
         {
-            this.Players = players;
-            this.Setup();
+            Players = players;
+            Setup();
         }
 
         private void Setup()
         {
-            this.TurnNumber = 1;
+            TurnNumber = 1;
             Random rand = new Random();
-            this.PlayerOnTurn = this.StartingPlayer = Players[rand.Next(0, Players.Count - 1)];
-            this.TurnPhase = TurnPhase.ACTION;
+            PlayerOnTurn = StartingPlayer = Players[rand.Next(0, Players.Count - 1)];
+            TurnPhase = TurnPhase.ACTION;
             CardsInPlay = new List<Stack<ICard>>();
             SetupCardSets();
         }
@@ -45,7 +45,7 @@ namespace Dominion.Models
         private void SetupCardSets()
         {
             Stack<ICard> copper = new Stack<ICard>();
-            for (int i = 0; i < 60 - (NumberOfPlayers * 7); i++)
+            for (int i = 0; i < 60 - NumberOfPlayers * 7; i++)
                 copper.Push(BigFuckingFactory.TreasureCardFactories[CardName.COPPER].CreateTreasureCard());
 
             Stack<ICard> silver = new Stack<ICard>();
@@ -58,15 +58,15 @@ namespace Dominion.Models
 
 
             Stack<ICard> estate = new Stack<ICard>();
-            for (int i = 0; i < (this.NumberOfPlayers == 2 ? 8 : 12); i++)
+            for (int i = 0; i < (NumberOfPlayers == 2 ? 8 : 12); i++)
                 estate.Push(BigFuckingFactory.VictoryCardFactories[CardName.ESTATE].CreateVictoryCard());
 
             Stack<ICard> duchy = new Stack<ICard>();
-            for (int i = 0; i < (this.NumberOfPlayers == 2 ? 8 : 12); i++)
+            for (int i = 0; i < (NumberOfPlayers == 2 ? 8 : 12); i++)
                 duchy.Push(BigFuckingFactory.VictoryCardFactories[CardName.DUCHY].CreateVictoryCard());
 
             Stack<ICard> province = new Stack<ICard>();
-            for (int i = 0; i < (this.NumberOfPlayers == 2 ? 8 : 12); i++)
+            for (int i = 0; i < (NumberOfPlayers == 2 ? 8 : 12); i++)
                 province.Push(BigFuckingFactory.VictoryCardFactories[CardName.PROVINCE].CreateVictoryCard());
 
             Stack<ICard> curse = new Stack<ICard>();
@@ -104,22 +104,22 @@ namespace Dominion.Models
 
         public void Advance()
         {
-            if (this.TurnPhase != TurnPhase.CLEANUP)
+            if (TurnPhase != TurnPhase.CLEANUP)
             {
-                this.TurnPhase++;
+                TurnPhase++;
                 return;
             }
 
             //on cleanup
-            this.PlayerOnTurn = Players[(Players.IndexOf(this.PlayerOnTurn) + 1) % Players.Count];
-            if (this.StartingPlayer == this.PlayerOnTurn)
+            PlayerOnTurn = Players[(Players.IndexOf(PlayerOnTurn) + 1) % Players.Count];
+            if (StartingPlayer == PlayerOnTurn)
                 TurnNumber++;
 
             //check game end triggers
             if (EmptyStacks == 3 || RemainingProvinces == 0)
-                this.TurnPhase = TurnPhase.GAME_END;
+                TurnPhase = TurnPhase.GAME_END;
             else
-                this.TurnPhase = TurnPhase.ACTION;
+                TurnPhase = TurnPhase.ACTION;
         }
 
         public Dictionary<Player, int> End()
@@ -136,8 +136,8 @@ namespace Dominion.Models
 
         public ICard TakeCard(CardName cardName)
         {
-            var stack = CardsInPlay.Find(c => c.Peek().Name == cardName);
-            var card = stack.Pop();
+            Stack<ICard> stack = CardsInPlay.Find(c => c.Peek().Name == cardName);
+            ICard card = stack.Pop();
             if (stack.Count == 0)
                 CardsInPlay.Remove(stack);
 

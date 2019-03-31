@@ -98,20 +98,13 @@ namespace Dominion.Models
             DiscardPile.Put(Hand.RemoveAll());
             DiscardPile.Put(Deck.RemoveAll());
 
-            int points = 0;
-            
-            foreach (IVictoryCard c in DiscardPile.VictoryCards)
-            {
-                    points += c.Points;
-            }
-
-            return points;
+            return DiscardPile.VictoryCards.Sum(c => c.Points);
         }
 
         public Player Draw(int n)
         {
             if (Deck.Size < n)
-                this.ReshuffleDiscardPileIntoDeck();
+                ReshuffleDiscardPileIntoDeck();
 
             Hand.Put(Deck.Draw(n));
 
