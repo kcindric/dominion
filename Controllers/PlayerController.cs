@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System.Linq;
 using Dominion.Models;
 using Dominion.Models.Cards.Interfaces;
 using Dominion.Views;
@@ -8,19 +9,33 @@ namespace Dominion.Controllers
 {
     public class PlayerController
     {
+        private readonly Game _game;
         private readonly Player _player;
         private readonly IPlayerView _playerView;
 
-        public PlayerController(Player model, IPlayerView view)
+        public PlayerController(Game gameModel, Player model, IPlayerView view)
         {
             _player = model;
             _playerView = view;
+            _game = gameModel;
         }
 
         public void StartActionPhase()
         {
             _player.StartTurn();
             _playerView.StartTurnRender(_player.TurnNumber, _player.Actions, _player.Buys, _player.Money, _player.Hand.Cards);
+
+            while (_player.Actions > 0)
+            {
+
+                IKingdomCard card = _playerView.PlayCard(_player.Hand.KingdomCards);
+                if (card == null)
+                    break;
+
+                IKingdomCard playedCard = (_player.Hand.Cards.First(c => c == card) as IKingdomCard);
+                _player.Action(playedCard);
+                playedCard?.Play(this._game,this._playerView);
+            } 
         }
 
         public void StartBuyPhase(List<Stack<ICard>> cardsInPlay)

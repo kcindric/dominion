@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -23,6 +24,18 @@ namespace Dominion.Models
             }
         }
 
+        internal IEnumerable<IKingdomCard> KingdomCards
+        {
+            get
+            {
+                foreach (ICard c in _cards)
+                {
+                    if (c is IKingdomCard kingdomCard)
+                        yield return kingdomCard;
+                }
+            }
+        }
+
         private readonly List<ICard> _cards;
 
         public Hand()
@@ -40,6 +53,14 @@ namespace Dominion.Models
         public void Put(List<ICard> cards)
         {
             _cards.AddRange(cards);
+        }
+
+        internal ICard Remove(ICard card)
+        {
+            var removed = card;
+            _cards.Remove(card);
+
+            return removed;
         }
     }
 }

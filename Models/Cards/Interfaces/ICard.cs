@@ -49,7 +49,8 @@ namespace Dominion.Models.Cards.Interfaces
         VASSAL,
         VILLAGE,
         WITCH,
-        WORKSHOP
+        WORKSHOP,
+        NONE
     }
 
     public interface ICard

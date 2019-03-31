@@ -4,6 +4,7 @@ using System.Linq;
 using Dominion.Models.Cards.Interfaces;
 using Dominion.Models.Cards.Factory;
 using Dominion.Models;
+using Dominion.Views;
 
 namespace Dominion.Models
 {
@@ -54,20 +55,16 @@ namespace Dominion.Models
 
         public void Action(IKingdomCard card)
         {
-            if (Actions > 0)
-            {
-                Actions--;
-                card.Play();
-            }
-            else
-                throw new Exception("No actions remaining!");
+            Actions--;
+            Hand.Remove(card);
+            DiscardPile.Put(card);
         }
 
         public void Buy(ICard card)
         {
             Buys--;
             Money -= card.Cost;
-            card.Player = this;
+            card.SetOwner(this);
             DiscardPile.Put(card);
             _boughtThisTurn.Add(card);
         }
@@ -138,6 +135,12 @@ namespace Dominion.Models
         private void ReshuffleDiscardPileIntoDeck()
         {
             Deck.PutUnder(DiscardPile.Shuffle().RemoveAll());
+        }
+
+        public void Gain(ICard card)
+        {
+            card.SetOwner(this);
+            DiscardPile.Put(card);
         }
     }
 }

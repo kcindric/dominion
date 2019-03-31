@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Dominion.Models.Cards.Interfaces;
 
 namespace Dominion.Views
@@ -25,7 +26,7 @@ namespace Dominion.Views
         /// <summary>
         /// Method for rendering visual representation of the CleanupRender Phase in player's turn.
         /// </summary>
-        /// <param name="newHand">List of cards in Player's newly drawn hand from deck</param>
+        /// <param name="newHand">List of hand in Player's newly drawn hand from deck</param>
         /// <param name="actions">Number of player's actions after resetting for the next turn</param>
         /// <param name="buys">Number of player's buys after resetting for the next turn</param>
         /// <param name="money">Amount of money in player's hand after resetting for the next turn</param>
@@ -36,13 +37,13 @@ namespace Dominion.Views
         /// </summary>
         /// <param name="money">Amount of money in player's buying budget</param>
         /// <param name="cardsInPlay">List of available card stacks to buy from</param>
-        /// <returns>Stack of cards player chose to buy one card from. Card will be popped from stack in the controller.</returns>
+        /// <returns>Stack of hand player chose to buy one card from. Card will be popped from stack in the controller.</returns>
         Stack<ICard> PromptBuyRender(int money, List<Stack<ICard>> cardsInPlay);
 
         /// <summary>
         /// Method for displaying results of the player's Buy Phase and ending it.
         /// </summary>
-        /// <param name="boughtCards">Collection of bought cards, for display purposes. Nullable</param>
+        /// <param name="boughtCards">Collection of bought hand, for display purposes. Nullable</param>
         void EndBuyPhaseRender(IEnumerable<ICard> boughtCards);
 
         /// <summary>
@@ -51,5 +52,9 @@ namespace Dominion.Views
         /// <param name="lastBoughtCard">Last bought card</param>
         /// <param name="money">Amount of remaining money in player's budget</param>
         void BuyCardRender(ICard lastBoughtCard, int money);
+
+        ICard ChooseCardFromHandRender(IEnumerable<ICard> hand);
+        CardName GainCardRender(int maxCardCost, List<Stack<ICard>> gameCardsInPlay);
+        IKingdomCard PlayCard(IEnumerable<IKingdomCard> hand);
     }
 }

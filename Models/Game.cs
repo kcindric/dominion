@@ -15,17 +15,16 @@ namespace Dominion.Models
 
     public class Game
     {
-        public int NumberOfPlayers => Players.Count;
-
-        public int RemainingProvinces;
-
         public List<Player> Players;
         public Player StartingPlayer;
         public Player PlayerOnTurn;
-        public int TurnNumber;
+        public int TurnNumber { get; private set; }
         public List<Stack<ICard>> CardsInPlay;
         public TurnPhase TurnPhase;
-        public int EmptyStacks;
+
+        public int NumberOfPlayers => Players.Count;
+        public int EmptyStacks => 17 - CardsInPlay.Count;
+        public int RemainingProvinces => CardsInPlay.Find(s => s.Peek().Name == CardName.PROVINCE).Count;
 
         public Game(List<Player> players)
         {
@@ -39,7 +38,6 @@ namespace Dominion.Models
             Random rand = new Random();
             this.PlayerOnTurn = this.StartingPlayer = Players[rand.Next(0, Players.Count - 1)];
             this.TurnPhase = TurnPhase.ACTION;
-            RemainingProvinces = this.NumberOfPlayers == 2 ? 8 : 12;
             CardsInPlay = new List<Stack<ICard>>();
             SetupCardSets();
         }
@@ -60,15 +58,15 @@ namespace Dominion.Models
 
 
             Stack<ICard> estate = new Stack<ICard>();
-            for (int i = 0; i < RemainingProvinces; i++)
+            for (int i = 0; i < (this.NumberOfPlayers == 2 ? 8 : 12); i++)
                 estate.Push(BigFuckingFactory.VictoryCardFactories[CardName.ESTATE].CreateVictoryCard());
 
             Stack<ICard> duchy = new Stack<ICard>();
-            for (int i = 0; i < RemainingProvinces; i++)
+            for (int i = 0; i < (this.NumberOfPlayers == 2 ? 8 : 12); i++)
                 duchy.Push(BigFuckingFactory.VictoryCardFactories[CardName.DUCHY].CreateVictoryCard());
 
             Stack<ICard> province = new Stack<ICard>();
-            for (int i = 0; i < RemainingProvinces; i++)
+            for (int i = 0; i < (this.NumberOfPlayers == 2 ? 8 : 12); i++)
                 province.Push(BigFuckingFactory.VictoryCardFactories[CardName.PROVINCE].CreateVictoryCard());
 
             Stack<ICard> curse = new Stack<ICard>();
@@ -134,6 +132,16 @@ namespace Dominion.Models
             }
 
             return finalScoring;
+        }
+
+        public ICard TakeCard(CardName cardName)
+        {
+            var stack = CardsInPlay.Find(c => c.Peek().Name == cardName);
+            var card = stack.Pop();
+            if (stack.Count == 0)
+                CardsInPlay.Remove(stack);
+
+            return card;
         }
     }
 }
